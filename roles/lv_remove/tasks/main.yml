@@ -1,0 +1,7 @@
+---
+- name: remove lv
+  community.general.lvol:
+    vg: '{{ vg_name }}'
+    lv: "{{ lv_name }}"
+    state: absent
+    force: true

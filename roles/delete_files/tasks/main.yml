@@ -1,0 +1,5 @@
+---
+- name: Delete old var
+  ansible.builtin.file:
+    path: '{{ path }}'
+    state: absent

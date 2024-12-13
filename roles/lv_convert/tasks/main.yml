@@ -1,0 +1,4 @@
+---
+- name: merge snapshot
+  ansible.builtin.shell:
+     'lvconvert --merge /dev/{{ vg_name }}/{{ snapshot_name }}'

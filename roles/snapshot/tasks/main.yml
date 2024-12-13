@@ -1,0 +1,7 @@
+---
+- name: Create a snapshot volume of the test logical volume.
+  community.general.lvol:
+    vg: '{{ vg_name }}'
+    lv: '{{ lv_name }}'
+    snapshot: '{{ snapshot_name | default(lv_name) }}'
+    size: '{{ size }}'

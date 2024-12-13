@@ -1,0 +1,7 @@
+---
+- name: Copy folder
+  ansible.builtin.copy:
+    src: '{{ source }}'
+    dest: '{{ dest }}'
+    mode: '{{ mode | default("preserve") }}'
+    remote_src: '{{ remote_src | default("false") }}'

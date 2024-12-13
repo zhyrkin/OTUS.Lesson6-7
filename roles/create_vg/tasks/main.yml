@@ -1,0 +1,6 @@
+---  
+- name: create PV & VG
+  community.general.lvg:
+    vg: '{{ vg_name }}'
+    pvs: "{{ disk }}"
+  

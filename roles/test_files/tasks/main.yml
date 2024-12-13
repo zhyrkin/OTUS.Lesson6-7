@@ -1,0 +1,8 @@
+---
+- name: Создаем/удаляем тестовые файлики
+  ansible.builtin.file:
+    path: '/{{ path }}/file{{ ansible_loop.index }}'
+    state: '{{ state | default("touch") }}'
+  loop: "{{ range(0, files ) }}"
+  loop_control:
+    extended: true

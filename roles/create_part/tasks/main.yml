@@ -1,0 +1,22 @@
+---
+- name: create fs
+  community.general.filesystem:
+    fstype: '{{ fstype }}'
+    dev: '/dev/{{vg_name}}/{{lv_name}}'
+  when: "fstype is defined"
+
+- name: mkdir
+  ansible.builtin.file:
+    path: '{{ path }}'
+    state: directory
+    mode: '0644'
+  when: "path is defined"
+
+- name: mount new part
+  ansible.posix.mount:
+    path: '{{ path }}'
+    src: /dev/{{vg_name}}/{{lv_name}}
+    fstype: '{{ fstype }}'
+    state: mounted
+  when: "path is defined"
+  notify: restart systemctl daemon

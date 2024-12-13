@@ -1,0 +1,109 @@
+---
+- name: Lessson 6-7. Выделить том под /var в зеркало
+  hosts: LVM_host
+  gather_facts: false
+  become: true
+  become_user: root
+  become_method: sudo
+  
+  vars:
+    vg_name: vg_var
+    lv_name: lv_var
+  roles:
+    - role: create_vg
+      disk: /dev/sdc,/dev/sdd
+    
+    - role: create_lv
+      size: 950M
+      opts: -m1
+    
+    - role: create_part
+      fstype: ext4
+      path: /mnt
+
+    - role: copy_files
+      source: /var/
+      dest: /mnt
+      remote_src: yes
+    
+    - role: delete_files
+      path: /var
+    
+    - role: unmount_point
+      mountpoint: /mnt
+    
+    - role: mount_point
+      path: /var
+      fstype: ext4
+    
+    
+
+
+- name: Lessson 6-7. Выделить том под /home
+  hosts: LVM_host
+  gather_facts: false
+  become: true
+  become_user: root
+  become_method: sudo
+  
+  vars:
+    vg_name: LVM-vg
+    lv_name: LogVol_Home
+  roles:
+    - role: create_lv
+      size: 2G
+    
+    - role: create_part
+      fstype: xfs
+      path: /mnt
+
+    - role: copy_files
+      source: /home/  
+      dest: /mnt
+      remote_src: yes
+    
+    - role: delete_files
+      path: /home
+
+    - role: unmount_point
+      mountpoint: /mnt
+    
+    - role: mount_point
+      path: /home
+      fstype: xfs
+
+- name: Lessson 6-7. Работа со снапшотами
+  hosts: LVM_host
+  gather_facts: false
+  become: true
+  become_user: root
+  become_method: sudo
+  
+  vars:
+    vg_name: LVM-vg
+    lv_name: LogVol_Home
+  
+  roles:
+    - role: test_files
+      path: /home/ #where should I create the test files
+      files: 20  #how many files you want?
+      state: touch #create
+
+    - role: snapshot 
+      snapshot_name: home_snap
+      size: 100M
+
+    - role: test_files
+      path: /home/ #where i must delete test files?
+      files: 11  #from where should I remove the test files?
+      state: absent #delete
+
+    - role: unmount_point
+      mountpoint: /home
+
+    - role: lv_convert
+      snapshot_name: home_snap
+
+    - role: mount_point
+      path: /home
+      fstype: xfs

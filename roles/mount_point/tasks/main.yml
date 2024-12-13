@@ -1,0 +1,7 @@
+---
+- name: mount new part
+  ansible.posix.mount:
+    path: '{{ path }}'
+    src: /dev/{{vg_name}}/{{lv_name}}
+    fstype: '{{ fstype }}'
+    state: mounted

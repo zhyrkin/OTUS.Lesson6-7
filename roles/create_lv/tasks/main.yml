@@ -1,0 +1,8 @@
+---
+# tasks file for create_lv  
+- name: Create a logical volume 
+  community.general.lvol:
+    vg: '{{ vg_name }}'
+    lv: '{{ lv_name }}'
+    size: '{{ size | default ("+100%FREE")}}'
+    opts: '{{ opts | default (" ") }}'

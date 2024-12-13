@@ -1,0 +1,11 @@
+---
+- name: umount part
+  ansible.posix.mount:
+    path: '{{ mountpoint }}'
+    state: unmounted
+
+  
+- name: umount part
+  ansible.posix.mount:
+    path: '{{ mountpoint }}'
+    state: absent_from_fstab
